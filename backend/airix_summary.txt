@@ -1,0 +1,4 @@
+AIRIX: 100.3
+Change vs previous round: -1.6
+Routes tracked: 10
+Observations used: 750

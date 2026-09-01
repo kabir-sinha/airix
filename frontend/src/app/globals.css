@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f5f3ec;
+  --surface: #ffffff;
+  --border: #e3e0d6;
+  --text: #12172a;
+  --text-muted: #6b7280;
+  --panel-navy: #0b1220;
+  --panel-surface: #141d33;
+  --panel-border: #24304a;
+  --panel-text: #e8e6de;
+  --panel-text-muted: #6b7a99;
+  --amber: #f0ab3d;
+  --teal: #2dd4bf;
+}
+
+.dark {
+  --bg: #0b1220;
+  --surface: #141d33;
+  --border: #24304a;
+  --text: #e8e6de;
+  --text-muted: #6b7a99;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-plex-sans), sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.font-mono-num {
+  font-family: var(--font-plex-mono), monospace;
+  font-variant-numeric: tabular-nums;
+}

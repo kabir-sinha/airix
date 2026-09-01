@@ -1,0 +1,69 @@
+route,airline,flight,departure_date,collection_time,booking_horizon,cabin,base_fare,taxes,total_fare,availability,source,quality_status
+DEL-BOM,IndiGo,6E512,2026-10-16,2026-09-01,T+45,Economy,3831,689,4520,Available,Scraped (technical demo site),Valid
+DEL-BOM,Air India,AI520,2026-10-16,2026-09-01,T+45,Economy,3932,708,4640,Available,Scraped (technical demo site),Valid
+DEL-BOM,Akasa Air,QP410,2026-10-16,2026-09-01,T+45,Economy,4085,735,4820,Available,Scraped (technical demo site),Valid
+DEL-BOM,IndiGo,6E588,2026-10-16,2026-09-01,T+45,Economy,4636,834,5470,Available,Scraped (technical demo site),Valid
+DEL-BOM,Air India,AI424,2026-10-16,2026-09-01,T+45,Economy,4873,877,5750,Available,Scraped (technical demo site),Valid
+DEL-BOM,Akasa Air,QP550,2026-10-16,2026-09-01,T+45,Economy,5059,911,5970,Available,Scraped (technical demo site),Valid
+DEL-BOM,IndiGo,6E165,2026-10-01,2026-09-01,T+30,Economy,5415,975,6390,Available,Scraped (technical demo site),Valid
+DEL-BOM,Akasa Air,QP172,2026-10-01,2026-09-01,T+30,Economy,5703,1027,6730,Available,Scraped (technical demo site),Valid
+DEL-BOM,IndiGo,6E644,2026-10-01,2026-09-01,T+30,Economy,5814,1046,6860,Available,Scraped (technical demo site),Valid
+DEL-BOM,Air India,AI898,2026-10-01,2026-09-01,T+30,Economy,6059,1091,7150,Available,Scraped (technical demo site),Valid
+DEL-BOM,Akasa Air,QP505,2026-10-01,2026-09-01,T+30,Economy,6288,1132,7420,Available,Scraped (technical demo site),Valid
+DEL-BOM,Air India,AI767,2026-10-01,2026-09-01,T+30,Economy,7169,1291,8460,Available,Scraped (technical demo site),Valid
+DEL-BOM,Air India,AI495,2026-09-16,2026-09-01,T+15,Economy,6831,1229,8060,Available,Scraped (technical demo site),Valid
+DEL-BOM,Akasa Air,QP813,2026-09-16,2026-09-01,T+15,Economy,7483,1347,8830,Available,Scraped (technical demo site),Valid
+DEL-BOM,Air India,AI125,2026-09-16,2026-09-01,T+15,Economy,7983,1437,9420,Available,Scraped (technical demo site),Valid
+DEL-BOM,Air India,AI444,2026-09-16,2026-09-01,T+15,Economy,8271,1489,9760,Available,Scraped (technical demo site),Valid
+DEL-BOM,IndiGo,6E229,2026-09-16,2026-09-01,T+15,Economy,8644,1556,10200,Available,Scraped (technical demo site),Valid
+DEL-BOM,Akasa Air,QP694,2026-09-16,2026-09-01,T+15,Economy,9034,1626,10660,Available,Scraped (technical demo site),Valid
+DEL-BOM,IndiGo,6E789,2026-09-16,2026-09-01,T+15,Economy,9076,1634,10710,Available,Scraped (technical demo site),Valid
+DEL-BOM,IndiGo,6E466,2026-09-16,2026-09-01,T+15,Economy,9153,1647,10800,Available,Scraped (technical demo site),Valid
+DEL-BOM,Akasa Air,QP224,2026-09-08,2026-09-01,T+7,Economy,8042,1448,9490,Available,Scraped (technical demo site),Valid
+DEL-BOM,IndiGo,6E837,2026-09-08,2026-09-01,T+7,Economy,8593,1547,10140,Available,Scraped (technical demo site),Valid
+DEL-BOM,Akasa Air,QP630,2026-09-08,2026-09-01,T+7,Economy,8831,1589,10420,Available,Scraped (technical demo site),Valid
+DEL-BOM,IndiGo,6E604,2026-09-08,2026-09-01,T+7,Economy,9093,1637,10730,Available,Scraped (technical demo site),Valid
+DEL-BOM,IndiGo,6E638,2026-09-08,2026-09-01,T+7,Economy,9161,1649,10810,Available,Scraped (technical demo site),Valid
+DEL-BOM,Air India,AI892,2026-09-08,2026-09-01,T+7,Economy,9500,1710,11210,Available,Scraped (technical demo site),Valid
+DEL-BOM,Air India,AI435,2026-09-08,2026-09-01,T+7,Economy,9958,1792,11750,Available,Scraped (technical demo site),Valid
+DEL-BOM,Air India,AI379,2026-09-02,2026-09-01,T+1,Economy,8398,1512,9910,Available,Scraped (technical demo site),Valid
+DEL-BOM,IndiGo,6E819,2026-09-02,2026-09-01,T+1,Economy,8415,1515,9930,Available,Scraped (technical demo site),Valid
+DEL-BOM,Akasa Air,QP542,2026-09-02,2026-09-01,T+1,Economy,9297,1673,10970,Available,Scraped (technical demo site),Valid
+DEL-BOM,Air India,AI852,2026-09-02,2026-09-01,T+1,Economy,10136,1824,11960,Available,Scraped (technical demo site),Valid
+DEL-BOM,Akasa Air,QP213,2026-09-02,2026-09-01,T+1,Economy,10136,1824,11960,Available,Scraped (technical demo site),Valid
+DEL-BOM,IndiGo,6E632,2026-09-02,2026-09-01,T+1,Economy,10763,1937,12700,Available,Scraped (technical demo site),Valid
+DEL-BLR,IndiGo,6E560,2026-10-16,2026-09-01,T+45,Economy,4110,740,4850,Available,Scraped (technical demo site),Valid
+DEL-BLR,Akasa Air,QP676,2026-10-16,2026-09-01,T+45,Economy,4458,802,5260,Available,Scraped (technical demo site),Valid
+DEL-BLR,Akasa Air,QP375,2026-10-16,2026-09-01,T+45,Economy,4898,882,5780,Available,Scraped (technical demo site),Valid
+DEL-BLR,IndiGo,6E496,2026-10-16,2026-09-01,T+45,Economy,5195,935,6130,Available,Scraped (technical demo site),Valid
+DEL-BLR,Air India,AI614,2026-10-16,2026-09-01,T+45,Economy,5212,938,6150,Available,Scraped (technical demo site),Valid
+DEL-BLR,Air India,AI127,2026-10-16,2026-09-01,T+45,Economy,5381,969,6350,Available,Scraped (technical demo site),Valid
+DEL-BLR,Air India,AI611,2026-10-01,2026-09-01,T+30,Economy,5720,1030,6750,Available,Scraped (technical demo site),Valid
+DEL-BLR,Air India,AI445,2026-10-01,2026-09-01,T+30,Economy,6331,1139,7470,Available,Scraped (technical demo site),Valid
+DEL-BLR,Akasa Air,QP156,2026-10-01,2026-09-01,T+30,Economy,6339,1141,7480,Available,Scraped (technical demo site),Valid
+DEL-BLR,IndiGo,6E466,2026-10-01,2026-09-01,T+30,Economy,6458,1162,7620,Available,Scraped (technical demo site),Valid
+DEL-BLR,IndiGo,6E428,2026-10-01,2026-09-01,T+30,Economy,6720,1210,7930,Available,Scraped (technical demo site),Valid
+DEL-BLR,Air India,AI688,2026-10-01,2026-09-01,T+30,Economy,7025,1265,8290,Available,Scraped (technical demo site),Valid
+DEL-BLR,Akasa Air,QP374,2026-10-01,2026-09-01,T+30,Economy,7263,1307,8570,Available,Scraped (technical demo site),Valid
+DEL-BLR,IndiGo,6E203,2026-10-01,2026-09-01,T+30,Economy,7297,1313,8610,Available,Scraped (technical demo site),Valid
+DEL-BLR,IndiGo,6E161,2026-09-16,2026-09-01,T+15,Economy,7059,1271,8330,Available,Scraped (technical demo site),Valid
+DEL-BLR,Akasa Air,QP228,2026-09-16,2026-09-01,T+15,Economy,7186,1294,8480,Available,Scraped (technical demo site),Valid
+DEL-BLR,Akasa Air,QP243,2026-09-16,2026-09-01,T+15,Economy,7924,1426,9350,Available,Scraped (technical demo site),Valid
+DEL-BLR,Air India,AI469,2026-09-16,2026-09-01,T+15,Economy,8297,1493,9790,Available,Scraped (technical demo site),Valid
+DEL-BLR,Air India,AI384,2026-09-16,2026-09-01,T+15,Economy,8458,1522,9980,Available,Scraped (technical demo site),Valid
+DEL-BLR,IndiGo,6E803,2026-09-16,2026-09-01,T+15,Economy,9263,1667,10930,Available,Scraped (technical demo site),Valid
+DEL-BLR,Air India,AI639,2026-09-08,2026-09-01,T+7,Economy,9051,1629,10680,Available,Scraped (technical demo site),Valid
+DEL-BLR,IndiGo,6E147,2026-09-08,2026-09-01,T+7,Economy,9144,1646,10790,Available,Scraped (technical demo site),Valid
+DEL-BLR,Air India,AI863,2026-09-08,2026-09-01,T+7,Economy,9373,1687,11060,Available,Scraped (technical demo site),Valid
+DEL-BLR,IndiGo,6E454,2026-09-08,2026-09-01,T+7,Economy,9924,1786,11710,Available,Scraped (technical demo site),Valid
+DEL-BLR,Akasa Air,QP422,2026-09-08,2026-09-01,T+7,Economy,10008,1802,11810,Available,Scraped (technical demo site),Valid
+DEL-BLR,Air India,AI243,2026-09-08,2026-09-01,T+7,Economy,10381,1869,12250,Available,Scraped (technical demo site),Valid
+DEL-BLR,Akasa Air,QP269,2026-09-08,2026-09-01,T+7,Economy,10441,1879,12320,Available,Scraped (technical demo site),Valid
+DEL-BLR,IndiGo,6E536,2026-09-08,2026-09-01,T+7,Economy,10559,1901,12460,Available,Scraped (technical demo site),Valid
+DEL-BLR,Akasa Air,QP848,2026-09-02,2026-09-01,T+1,Economy,8636,1554,10190,Available,Scraped (technical demo site),Valid
+DEL-BLR,IndiGo,6E862,2026-09-02,2026-09-01,T+1,Economy,9017,1623,10640,Available,Scraped (technical demo site),Valid
+DEL-BLR,Air India,AI855,2026-09-02,2026-09-01,T+1,Economy,9246,1664,10910,Available,Scraped (technical demo site),Valid
+DEL-BLR,IndiGo,6E495,2026-09-02,2026-09-01,T+1,Economy,9449,1701,11150,Available,Scraped (technical demo site),Valid
+DEL-BLR,Akasa Air,QP515,2026-09-02,2026-09-01,T+1,Economy,9593,1727,11320,Available,Scraped (technical demo site),Valid
+DEL-BLR,Air India,AI600,2026-09-02,2026-09-01,T+1,Economy,9661,1739,11400,Available,Scraped (technical demo site),Valid
+DEL-BLR,IndiGo,6E569,2026-09-02,2026-09-01,T+1,Economy,10517,1893,12410,Available,Scraped (technical demo site),Valid

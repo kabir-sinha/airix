@@ -1,0 +1,7 @@
+{
+  "data_source": "synthetic_proxy_pending_dgca",
+  "periods_compared": 35,
+  "mae": 5.1987,
+  "rmse": 5.368,
+  "mape_pct": 5.13
+}

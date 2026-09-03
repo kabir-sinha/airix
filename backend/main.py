@@ -4,6 +4,7 @@ The FastAPI backend for AIRIX. Reads from the SQLite database (airix.db),
 always serving the latest pipeline run's data.
 """
 
+import json
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import func
@@ -250,3 +251,17 @@ def get_data_quality():
         }
     finally:
         session.close()
+
+
+@app.get("/api/backtest")
+def get_backtest():
+    try:
+        with open("backtest_summary.json") as f:
+            summary = json.load(f)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="No backtest results found. Run backtest_index.py first.")
+    series_df = pd.read_csv("backtest_series.csv")
+    return {
+        "summary": summary,
+        "series": series_df.to_dict(orient="records"),
+    }

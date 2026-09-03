@@ -28,7 +28,7 @@ Fare data → Cleaning & audit trail → Jevons Index calc → SQLite (historica
 - **Backend**: Python, FastAPI, SQLAlchemy, SQLite
 - **Frontend**: Next.js, React, Tailwind CSS, Recharts
 - **Statistics**: Jevons Index, real DGCA-weighted aggregation ([Vonter/india-aviation-traffic](https://github.com/Vonter/india-aviation-traffic), ODbL-licensed)
-- **Testing**: pytest — 10 unit tests proving the core index math is correct
+- **Testing**: pytest — 43 tests across 7 files proving the core index math, data cleaning, fare-splitting, backtest metrics, scheduling, and API layers are correct
 - **Data collection**: a working Playwright-based scraper, validated against a purpose-built mock booking site (see note below)
 
 ## On real-time data collection

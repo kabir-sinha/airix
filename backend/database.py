@@ -5,11 +5,12 @@ Each pipeline run is stored as a dated snapshot, so history accumulates
 over time instead of being overwritten (unlike the raw CSV files).
 """
 
+import os
 from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime
 from sqlalchemy.orm import declarative_base, sessionmaker
 from datetime import datetime
 
-DATABASE_URL = "sqlite:///airix.db"
+DATABASE_URL = os.environ.get("AIRIX_DB_URL", "sqlite:///airix.db")
 engine = create_engine(DATABASE_URL, echo=False)
 Base = declarative_base()
 SessionLocal = sessionmaker(bind=engine)

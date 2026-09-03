@@ -210,6 +210,8 @@ export default function Home() {
           </ResponsiveContainer>
         </section>
 
+        <Heatmap apiUrl={API_URL} />
+
         {/* Contributions panel */}
         <section className="border border-[var(--border)] rounded-lg bg-[var(--surface)] p-6">
           <div className="flex items-center justify-between mb-1">
@@ -323,5 +325,64 @@ function SortableHeader({ label, sortKey, currentKey, dir, onClick, align = "lef
     >
       {label} {active && (dir === "asc" ? "▲" : "▼")}
     </th>
+  );
+}
+
+function Heatmap({ apiUrl }) {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    fetch(`${apiUrl}/api/heatmap?freq=weekly`)
+      .then((res) => res.json())
+      .then(setData)
+      .catch(() => setData(null));
+  }, [apiUrl]);
+
+  if (!data || data.routes.length === 0) return null;
+
+  const allValues = data.matrix.flat().filter((v) => v !== null);
+  const min = Math.min(...allValues);
+  const max = Math.max(...allValues);
+
+  function colorFor(value) {
+    if (value === null) return "var(--border)";
+    const t = max === min ? 0.5 : (value - min) / (max - min);
+    const teal = [20, 184, 166];
+    const amber = [217, 119, 6];
+    const rgb = teal.map((c, i) => Math.round(c + (amber[i] - c) * t));
+    return `rgb(${rgb.join(",")})`;
+  }
+
+  return (
+    <section className="border border-[var(--border)] rounded-lg bg-[var(--surface)] p-6 overflow-x-auto">
+      <h2 className="text-sm font-semibold mb-6">Sector-Wise Fare Index Heatmap (Weekly)</h2>
+      <table className="text-xs border-separate" style={{ borderSpacing: 2 }}>
+        <thead>
+          <tr>
+            <th className="text-left pr-3 pb-1 text-[var(--text-muted)] font-medium">ROUTE</th>
+            {data.periods.map((p) => (
+              <th key={p} className="px-2 pb-1 text-[var(--text-muted)] font-medium font-mono-num">{p}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.routes.map((route, ri) => (
+            <tr key={route}>
+              <td className="pr-3 py-1 font-medium">{route}</td>
+              {data.matrix[ri].map((value, ci) => (
+                <td
+                  key={ci}
+                  title={value === null ? "no data" : `${route} — ${data.periods[ci]}: ${value}`}
+                  className="w-14 h-8 text-center font-mono-num rounded"
+                  style={{ background: colorFor(value), color: "#fff" }}
+                >
+                  {value === null ? "" : value}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
   );
 }

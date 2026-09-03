@@ -265,3 +265,49 @@ def get_backtest():
         "summary": summary,
         "series": series_df.to_dict(orient="records"),
     }
+
+
+@app.get("/api/heatmap")
+def get_heatmap(freq: str = "weekly"):
+    if freq not in ("daily", "weekly", "monthly"):
+        raise HTTPException(status_code=400, detail="freq must be daily, weekly, or monthly")
+    session = SessionLocal()
+    try:
+        latest = get_latest_run(session)
+        snaps = (
+            session.query(RouteIndexSnapshot)
+            .filter(RouteIndexSnapshot.run_id == latest.id)
+            .all()
+        )
+        df = pd.DataFrame([
+            {"route": s.route, "date": s.collection_date, "index_value": s.index_value}
+            for s in snaps if s.collection_date
+        ])
+        if df.empty:
+            return {"routes": [], "periods": [], "matrix": []}
+        df["date"] = pd.to_datetime(df["date"])
+
+        route_series = {}
+        periods = set()
+        for route, group in df.groupby("route"):
+            series = group.set_index("date")["index_value"].sort_index()
+            aggregated = aggregate_series(series, freq)
+            route_series[route] = aggregated
+            periods.update(aggregated.index)
+
+        sorted_periods = sorted(periods)
+        routes = sorted(route_series.keys())
+        matrix = [
+            [
+                round(float(route_series[route][period]), 1) if period in route_series[route].index else None
+                for period in sorted_periods
+            ]
+            for route in routes
+        ]
+        return {
+            "routes": routes,
+            "periods": [p.strftime("%Y-%m-%d") for p in sorted_periods],
+            "matrix": matrix,
+        }
+    finally:
+        session.close()

@@ -81,6 +81,7 @@ def test_index_history_rejects_bad_freq():
     assert res.status_code == 400
 
 
-def test_backtest_missing_returns_404():
+def test_backtest_missing_returns_404(monkeypatch, tmp_path):
+    monkeypatch.chdir(tmp_path)
     res = client.get("/api/backtest")
     assert res.status_code == 404

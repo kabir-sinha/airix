@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import func
 import pandas as pd
 from index_math import weighted_airix
+from aggregate_frequency import aggregate_series
 from database import SessionLocal, PipelineRun, RouteIndexSnapshot, RouteContribution, FareObservation
 
 app = FastAPI(title="AIRIX API")
@@ -53,31 +54,39 @@ def get_summary():
 
 
 @app.get("/api/index/history")
-def get_index_history():
+def get_index_history(freq: str = "daily"):
+    if freq not in ("daily", "weekly", "monthly"):
+        raise HTTPException(status_code=400, detail="freq must be daily, weekly, or monthly")
     session = SessionLocal()
     try:
         latest = get_latest_run(session)
         weights_df = pd.read_csv("route_weights.csv").set_index("route")["weight"]
         weights = weights_df.to_dict()
 
-        rows = (
-            session.query(RouteIndexSnapshot.collection_round)
+        snaps = (
+            session.query(RouteIndexSnapshot)
             .filter(RouteIndexSnapshot.run_id == latest.id)
-            .distinct()
             .all()
         )
-        history = []
-        rounds = sorted(set(r[0] for r in rows))
-        for rnd in rounds:
-            snaps = (
-                session.query(RouteIndexSnapshot)
-                .filter(RouteIndexSnapshot.run_id == latest.id, RouteIndexSnapshot.collection_round == rnd)
-                .all()
-            )
-            route_indices = {s.route: s.index_value for s in snaps}
-            airix = weighted_airix(route_indices, weights)
-            history.append({"collection_round": rnd, "airix": round(airix, 1)})
-        return history
+        by_round = {}
+        dates_by_round = {}
+        for s in snaps:
+            by_round.setdefault(s.collection_round, {})[s.route] = s.index_value
+            dates_by_round[s.collection_round] = s.collection_date
+
+        daily_values = {}
+        for rnd, route_indices in by_round.items():
+            date = dates_by_round.get(rnd)
+            if not date:
+                continue
+            daily_values[pd.Timestamp(date)] = round(weighted_airix(route_indices, weights), 1)
+
+        daily_series = pd.Series(daily_values).sort_index()
+        aggregated = aggregate_series(daily_series, freq)
+        return [
+            {"date": ts.strftime("%Y-%m-%d"), "airix": float(value)}
+            for ts, value in aggregated.items()
+        ]
     finally:
         session.close()
 

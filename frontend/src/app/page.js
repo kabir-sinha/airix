@@ -21,6 +21,7 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("contribution_pp");
   const [sortDir, setSortDir] = useState("desc");
+  const [freq, setFreq] = useState("weekly");
 
   useEffect(() => {
     setIsDark(document.documentElement.classList.contains("dark"));
@@ -36,14 +37,12 @@ export default function Home() {
   useEffect(() => {
     async function loadData() {
       try {
-        const [summaryRes, historyRes, contribRes, routesRes] = await Promise.all([
+        const [summaryRes, contribRes, routesRes] = await Promise.all([
           fetch(`${API_URL}/api/summary`),
-          fetch(`${API_URL}/api/index/history`),
           fetch(`${API_URL}/api/contributions`),
           fetch(`${API_URL}/api/routes`),
         ]);
         setSummary(await summaryRes.json());
-        setHistory(await historyRes.json());
         setContributions(await contribRes.json());
         setRoutes(await routesRes.json());
       } catch (err) {
@@ -54,6 +53,19 @@ export default function Home() {
     }
     loadData();
   }, []);
+
+  useEffect(() => {
+    async function loadHistory() {
+      try {
+        const res = await fetch(`${API_URL}/api/index/history?freq=${freq}`);
+        setHistory(await res.json());
+      } catch (err) {
+        // Trend panel stays empty; the page-level error state already
+        // covers a fully unreachable backend.
+      }
+    }
+    loadHistory();
+  }, [freq]);
 
   const tableData = useMemo(() => {
     const contribMap = Object.fromEntries(contributions.map((c) => [c.route, c.contribution_pp]));
@@ -159,16 +171,28 @@ export default function Home() {
       <main className="max-w-6xl mx-auto px-6 sm:px-10 py-10 space-y-10">
         {/* Trend panel */}
         <section className="border border-[var(--border)] rounded-lg bg-[var(--surface)] p-6">
-          <h2 className="text-sm font-semibold mb-6">AIRIX Trend</h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-sm font-semibold">AIRIX Trend</h2>
+            <div className="flex gap-1">
+              {["daily", "weekly", "monthly"].map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setFreq(f)}
+                  className={`text-xs px-3 py-1 rounded border transition-colors ${
+                    freq === f
+                      ? "border-[var(--amber)] text-[var(--amber)]"
+                      : "border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)]"
+                  }`}
+                >
+                  {f[0].toUpperCase() + f.slice(1)}
+                </button>
+              ))}
+            </div>
+          </div>
           <ResponsiveContainer width="100%" height={260}>
             <LineChart data={history}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-              <XAxis
-                dataKey="collection_round"
-                tickFormatter={(r) => `R${r}`}
-                stroke="var(--text-muted)"
-                fontSize={12}
-              />
+              <XAxis dataKey="date" stroke="var(--text-muted)" fontSize={12} />
               <YAxis domain={["dataMin - 3", "dataMax + 3"]} stroke="var(--text-muted)" fontSize={12} />
               <Tooltip
                 contentStyle={{
@@ -176,7 +200,6 @@ export default function Home() {
                   border: "1px solid var(--border)",
                   fontSize: 13,
                 }}
-                labelFormatter={(r) => `Round ${r}`}
                 formatter={(value) => [value, "AIRIX"]}
               />
               <Line type="monotone" dataKey="airix" stroke="var(--amber)" strokeWidth={2} dot={{ r: 3 }} />

@@ -17,6 +17,7 @@ airix_trend = pd.read_csv("airix_trend.csv")
 route_indices = pd.read_csv("route_indices_by_round.csv")
 contributions = pd.read_csv("route_contributions.csv")
 cleaned = pd.read_csv("fares_cleaned.csv")
+round_dates = pd.read_csv("round_dates.csv").set_index("collection_round")["date"].to_dict()
 
 current_airix = float(airix_trend["airix"].iloc[-1])
 n_routes = route_indices.shape[1] - 1
@@ -39,11 +40,13 @@ print(f"Created pipeline run #{run.id} — AIRIX: {current_airix}")
 # ---- Save route index snapshots (every route, every round) ----
 route_cols = [c for c in route_indices.columns if c != "collection_round"]
 for _, row in route_indices.iterrows():
+    rnd = int(row["collection_round"])
     for route in route_cols:
         session.add(RouteIndexSnapshot(
             run_id=run.id,
             route=route,
-            collection_round=int(row["collection_round"]),
+            collection_round=rnd,
+            collection_date=round_dates.get(rnd),
             index_value=float(row[route]),
         ))
 
@@ -66,7 +69,10 @@ for _, row in cleaned.iterrows():
         collection_time=row["collection_time"],
         booking_horizon=row["booking_horizon"],
         base_fare=float(row["base_fare"]),
-        taxes=float(row["taxes"]),
+        fuel_surcharge=float(row.get("fuel_surcharge", 0) or 0),
+        udf=float(row.get("udf", 0) or 0),
+        convenience_fee=float(row.get("convenience_fee", 0) or 0),
+        gst=float(row.get("gst", 0) or 0),
         total_fare=float(row["total_fare"]),
         availability=row["availability"],
         source=row["source"],

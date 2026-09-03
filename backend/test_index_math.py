@@ -5,7 +5,7 @@ Run with: pytest
 """
 
 import pytest
-from index_math import price_relative, jevons_index, weighted_airix, route_contributions
+from index_math import price_relative, jevons_index, weighted_airix, route_contributions, chain_link_index
 
 
 # ---- price_relative ----
@@ -77,3 +77,18 @@ def test_route_contributions_sum_matches_total_change():
     assert contributions["B"] == pytest.approx(-2.8)
     # Contributions should sum to the weighted total change
     assert sum(contributions.values()) == pytest.approx(0.2)
+
+
+# ---- chain_link_index ----
+
+def test_chain_link_index_constant_series():
+    assert chain_link_index([100, 100, 100]) == pytest.approx(100.0)
+
+def test_chain_link_index_uses_geometric_mean():
+    # gmean([80, 125]) == 100 exactly; arithmetic mean would give 102.5 —
+    # proves this chains geometrically, consistent with Jevons.
+    assert chain_link_index([80, 125]) == pytest.approx(100.0)
+
+def test_chain_link_index_empty_raises():
+    with pytest.raises(ValueError):
+        chain_link_index([])

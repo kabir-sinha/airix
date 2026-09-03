@@ -43,3 +43,15 @@ def route_contributions(route_index_change: dict, weights: dict):
     Sum of all contributions should equal the total AIRIX change.
     """
     return {route: change * weights.get(route, 0) for route, change in route_index_change.items()}
+
+
+def chain_link_index(index_values):
+    """
+    Chain-links a series of already-computed index values (each already on
+    a base of 100) into a single period index via their geometric mean.
+    Used to roll a daily AIRIX series up into weekly/monthly periods
+    without breaking the geometric-mean methodology used to build it.
+    """
+    if len(index_values) == 0:
+        raise ValueError("index_values cannot be empty")
+    return gmean(index_values)

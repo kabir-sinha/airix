@@ -47,6 +47,7 @@ python3 generate_data.py
 python3 clean_data.py
 python3 calculate_dgca_weights.py
 python3 calculate_index.py
+python3 backtest_index.py
 python3 load_to_database.py
 uvicorn main:app --reload
 ```
@@ -65,6 +66,17 @@ Visit `http://localhost:3000`.
 cd backend
 pytest -v
 ```
+
+**Scheduling**
+```bash
+cd backend
+python3 scheduler.py
+```
+Runs the full pipeline once immediately, then daily at 02:00. See `docs/PS_MAPPING.md` for how this and every other pipeline stage maps to the problem statement.
+
+**Model validation**
+
+Visit `http://localhost:3000/validation` for the back-test results (currently a synthetic-proxy validation — see the disclaimer on that page and in `docs/PS_MAPPING.md`).
 
 ## Team
 

@@ -92,10 +92,11 @@ export default function RouteDetail() {
       </header>
 
       <main className="max-w-4xl mx-auto px-6 sm:px-10 py-10 space-y-8">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <StatCard label="Current Route Index" value={detail.current_index} />
           <StatCard label="Current Average Fare" value={`₹${detail.current_average_fare.toLocaleString("en-IN")}`} />
           <StatCard label="Lead-Time Increase" value={`+${detail.lead_time_increase_pct}%`} color="var(--amber)" />
+          <StatCard label="Elasticity" value={`${detail.elasticity_pct_per_day}%/day`} color="var(--teal)" />
         </div>
 
         <section className="border border-[var(--border)] rounded-lg bg-[var(--surface)] p-6">
@@ -112,6 +113,18 @@ export default function RouteDetail() {
               <Line type="monotone" dataKey="fare" stroke="var(--amber)" strokeWidth={2} dot={{ r: 3 }} />
             </LineChart>
           </ResponsiveContainer>
+        </section>
+
+        <section className="border border-[var(--border)] rounded-lg bg-[var(--surface)] p-6">
+          <h2 className="text-sm font-semibold mb-4">Fare Breakdown (T+1, average)</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 text-sm">
+            {Object.entries(detail.fare_breakdown).map(([component, value]) => (
+              <div key={component}>
+                <p className="text-xs text-[var(--text-muted)] capitalize mb-1">{component.replace("_", " ")}</p>
+                <p className="font-mono-num">₹{value.toLocaleString("en-IN")}</p>
+              </div>
+            ))}
+          </div>
         </section>
 
         <section className="border border-[var(--border)] rounded-lg bg-[var(--surface)] p-6">

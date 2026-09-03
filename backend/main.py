@@ -9,7 +9,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import func
 import pandas as pd
-from index_math import weighted_airix
+from index_math import weighted_airix, lead_time_elasticity
 from aggregate_frequency import aggregate_series
 from database import SessionLocal, PipelineRun, RouteIndexSnapshot, RouteContribution, FareObservation
 
@@ -166,6 +166,15 @@ def get_route_detail(route: str):
             if fare_curve["T+45"] else 0
         )
 
+        elasticity_pct_per_day = lead_time_elasticity(fare_curve)
+
+        breakdown_fields = ["base_fare", "fuel_surcharge", "udf", "convenience_fee", "gst"]
+        t1_fares = [f for f in fares if f.booking_horizon == "T+1"]
+        fare_breakdown = {
+            field: round(sum(getattr(f, field) for f in t1_fares) / len(t1_fares), 0) if t1_fares else 0
+            for field in breakdown_fields
+        }
+
         all_contribs = (
             session.query(RouteContribution)
             .filter(RouteContribution.run_id == latest.id)
@@ -193,6 +202,8 @@ def get_route_detail(route: str):
             "current_average_fare": fare_curve["T+1"],
             "fare_by_horizon": fare_curve,
             "lead_time_increase_pct": lead_time_increase_pct,
+            "elasticity_pct_per_day": elasticity_pct_per_day,
+            "fare_breakdown": fare_breakdown,
             "contribution_pp": this_contribution,
             "contribution_rank": rank,
             "total_routes": len(all_contribs),

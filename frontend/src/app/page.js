@@ -137,6 +137,9 @@ export default function Home() {
                 <a href="/data-quality" className="hover:text-[var(--panel-text)] transition-colors">
                   Data Quality
                 </a>
+                <a href="/validation" className="hover:text-[var(--panel-text)] transition-colors">
+                  Model Validation
+                </a>
               </nav>
               <button
                 onClick={toggleTheme}

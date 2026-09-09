@@ -1,4 +1,5 @@
 # AIRIX — Airfare Intelligence & Price Index Engine
+![Tests](https://github.com/kabir-sinha/airix/actions/workflows/tests.yml/badge.svg)
 
 **SIH26056 · Ministry of Statistics & Programme Implementation (MoSPI)**
 

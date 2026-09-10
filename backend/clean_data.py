@@ -72,12 +72,12 @@ def flag_outliers(df):
 if __name__ == "__main__":
     synthetic = pd.read_csv("fares_synthetic.csv")
 
-    if os.path.exists("fares_scraped.csv"):
-        scraped = pd.read_csv("fares_scraped.csv")
-        df = merge_scraped(synthetic, scraped)
-        print(f"Merged {len(scraped)} scraped observations into the latest round.")
-    else:
-        df = synthetic
+     # merge_scraped() is defined and tested above, but disabled here by default:
+    # scraped fares currently run 60-100% higher than synthetic ones at every
+    # booking horizon (confirmed on DEL-BLR), so blending them directly distorts
+    # the index rather than reflecting a real price movement. Re-enable only
+    # after calibrating the two sources to a comparable scale.
+    df = synthetic
 
     print(f"Loaded {len(df)} raw records.")
 

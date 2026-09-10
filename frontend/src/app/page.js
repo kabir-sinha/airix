@@ -110,7 +110,7 @@ export default function Home() {
       <div className="flex items-baseline gap-3">
         <span className="kicker">Airfare Index / Overview</span>
       </div>
-      <h1 className="font-heading text-3xl mt-1">India Airfare Price Index</h1>
+      <h1 className="font-heading text-3xl mt-1">AIRIX</h1>
       <p className="text-sm text-[var(--panel-text-muted)] mt-1">
         Airfare Intelligence &amp; Price Index Engine — real-time domestic monitoring
       </p>
@@ -175,7 +175,12 @@ export default function Home() {
         </ResponsiveContainer>
       </Card>
 
-      <Heatmap apiUrl={API_URL} />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <Heatmap apiUrl={API_URL} />
+        </div>
+        <RouteNetworkMap contributions={contributions} />
+      </div>
 
       {/* Contributions panel */}
       <Card>
@@ -331,6 +336,80 @@ function Heatmap({ apiUrl }) {
           ))}
         </tbody>
       </table>
+    </Card>
+  );
+}
+
+const CITY_POSITIONS = {
+  DEL: { x: 160, y: 50, label: "Delhi" },
+  BOM: { x: 80, y: 210, label: "Mumbai" },
+  HYD: { x: 195, y: 240, label: "Hyderabad" },
+  MAA: { x: 225, y: 320, label: "Chennai" },
+  BLR: { x: 165, y: 300, label: "Bengaluru" },
+  CCU: { x: 320, y: 140, label: "Kolkata" },
+};
+
+function RouteNetworkMap({ contributions }) {
+  const contribMap = Object.fromEntries((contributions || []).map((c) => [c.route, c.contribution_pp]));
+  const routes = Object.keys(contribMap).length ? Object.keys(contribMap) : [
+    "DEL-BOM", "DEL-BLR", "DEL-HYD", "DEL-CCU", "DEL-MAA",
+    "BOM-BLR", "BOM-HYD", "BOM-MAA", "BLR-HYD", "CCU-BLR",
+  ];
+
+  return (
+    <Card>
+      <h2 className="font-heading text-lg mb-1">Route Network</h2>
+      <p className="text-xs text-[var(--text-muted)] mb-4">Schematic layout, not to scale</p>
+      <div style={{ perspective: "900px" }}>
+        <svg
+          viewBox="0 0 380 380"
+          className="w-full"
+          style={{
+            transform: "rotateX(18deg) rotateZ(-2deg)",
+            filter: "drop-shadow(0 18px 20px rgba(0,0,0,0.25))",
+          }}
+        >
+          {routes.map((route) => {
+            const [a, b] = route.split("-");
+            const from = CITY_POSITIONS[a];
+            const to = CITY_POSITIONS[b];
+            if (!from || !to) return null;
+            const value = contribMap[route] ?? 0;
+            const color = value >= 0 ? "var(--amber)" : "var(--teal)";
+            return (
+              <line
+                key={route}
+                x1={from.x} y1={from.y} x2={to.x} y2={to.y}
+                stroke={color} strokeWidth={2} opacity={0.75}
+              >
+                <title>{`${route}: ${value >= 0 ? "+" : ""}${value} pp`}</title>
+              </line>
+            );
+          })}
+          {Object.entries(CITY_POSITIONS).map(([code, city]) => (
+            <g key={code}>
+              <circle cx={city.x} cy={city.y} r={6} fill="var(--surface)" stroke="var(--text)" strokeWidth={1.5} />
+              <text
+                x={city.x} y={city.y - 12}
+                textAnchor="middle" fontSize={11}
+                fill="var(--text)" fontWeight={600}
+              >
+                {code}
+              </text>
+            </g>
+          ))}
+        </svg>
+      </div>
+      <div className="flex items-center gap-4 mt-2 text-xs text-[var(--text-muted)]">
+        <span className="flex items-center gap-1.5">
+          <span className="w-2.5 h-2.5 rounded-sm inline-block" style={{ background: "var(--amber)" }} />
+          Rising
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-2.5 h-2.5 rounded-sm inline-block" style={{ background: "var(--teal)" }} />
+          Falling
+        </span>
+      </div>
     </Card>
   );
 }

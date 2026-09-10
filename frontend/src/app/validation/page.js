@@ -64,11 +64,20 @@ export default function Validation() {
           <i className="bp-corner tr" aria-hidden="true" />
           <i className="bp-corner bl" aria-hidden="true" />
           <i className="bp-corner br" aria-hidden="true" />
-          <strong>Synthetic proxy backtest.</strong> No real DGCA monthly average-fare
-          dataset is wired in yet, so this validates AIRIX against the known
-          ground-truth index used to generate the synthetic data, not real
-          market data. Run <code>backtest_index.py --reference &lt;dgca_file.csv&gt; --label real_dgca</code> once
-          a real dataset is available to replace this.
+          <p>
+            <strong>Synthetic proxy backtest.</strong> This validates AIRIX
+            against the known ground-truth index used to generate the
+            synthetic data, not real market data — a genuine DGCA-based
+            backtest is a planned next step.
+          </p>
+          <details className="mt-2 text-xs text-[var(--text-muted)]">
+            <summary className="cursor-pointer select-none">Technical note</summary>
+            <p className="mt-1">
+              No real DGCA monthly average-fare dataset is wired in yet. Run{" "}
+              <code>backtest_index.py --reference &lt;dgca_file.csv&gt; --label real_dgca</code>{" "}
+              once a real dataset is available to replace this.
+            </p>
+          </details>
         </div>
       )}
 

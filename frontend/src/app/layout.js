@@ -1,11 +1,17 @@
 import Script from "next/script";
-import { IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Barlow, Barlow_Condensed, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
-const plexSans = IBM_Plex_Sans({
-  variable: "--font-plex-sans",
+const barlow = Barlow({
+  variable: "--font-barlow",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
+});
+
+const barlowCondensed = Barlow_Condensed({
+  variable: "--font-barlow-condensed",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
 });
 
 const plexMono = IBM_Plex_Mono({
@@ -23,7 +29,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${plexSans.variable} ${plexMono.variable}`}
+      className={`${barlow.variable} ${barlowCondensed.variable} ${plexMono.variable}`}
       suppressHydrationWarning
     >
       <head>

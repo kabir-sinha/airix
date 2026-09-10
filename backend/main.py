@@ -4,11 +4,13 @@ The FastAPI backend for AIRIX. Reads from the SQLite database (airix.db),
 always serving the latest pipeline run's data.
 """
 
+import json
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import func
 import pandas as pd
-from index_math import weighted_airix
+from index_math import weighted_airix, lead_time_elasticity
+from aggregate_frequency import aggregate_series
 from database import SessionLocal, PipelineRun, RouteIndexSnapshot, RouteContribution, FareObservation
 
 app = FastAPI(title="AIRIX API")
@@ -53,31 +55,39 @@ def get_summary():
 
 
 @app.get("/api/index/history")
-def get_index_history():
+def get_index_history(freq: str = "daily"):
+    if freq not in ("daily", "weekly", "monthly"):
+        raise HTTPException(status_code=400, detail="freq must be daily, weekly, or monthly")
     session = SessionLocal()
     try:
         latest = get_latest_run(session)
         weights_df = pd.read_csv("route_weights.csv").set_index("route")["weight"]
         weights = weights_df.to_dict()
 
-        rows = (
-            session.query(RouteIndexSnapshot.collection_round)
+        snaps = (
+            session.query(RouteIndexSnapshot)
             .filter(RouteIndexSnapshot.run_id == latest.id)
-            .distinct()
             .all()
         )
-        history = []
-        rounds = sorted(set(r[0] for r in rows))
-        for rnd in rounds:
-            snaps = (
-                session.query(RouteIndexSnapshot)
-                .filter(RouteIndexSnapshot.run_id == latest.id, RouteIndexSnapshot.collection_round == rnd)
-                .all()
-            )
-            route_indices = {s.route: s.index_value for s in snaps}
-            airix = weighted_airix(route_indices, weights)
-            history.append({"collection_round": rnd, "airix": round(airix, 1)})
-        return history
+        by_round = {}
+        dates_by_round = {}
+        for s in snaps:
+            by_round.setdefault(s.collection_round, {})[s.route] = s.index_value
+            dates_by_round[s.collection_round] = s.collection_date
+
+        daily_values = {}
+        for rnd, route_indices in by_round.items():
+            date = dates_by_round.get(rnd)
+            if not date:
+                continue
+            daily_values[pd.Timestamp(date)] = round(weighted_airix(route_indices, weights), 1)
+
+        daily_series = pd.Series(daily_values).sort_index()
+        aggregated = aggregate_series(daily_series, freq)
+        return [
+            {"date": ts.strftime("%Y-%m-%d"), "airix": float(value)}
+            for ts, value in aggregated.items()
+        ]
     finally:
         session.close()
 
@@ -156,6 +166,15 @@ def get_route_detail(route: str):
             if fare_curve["T+45"] else 0
         )
 
+        elasticity_pct_per_day = lead_time_elasticity(fare_curve)
+
+        breakdown_fields = ["base_fare", "fuel_surcharge", "udf", "convenience_fee", "gst"]
+        t1_fares = [f for f in fares if f.booking_horizon == "T+1"]
+        fare_breakdown = {
+            field: round(sum(getattr(f, field) for f in t1_fares) / len(t1_fares), 0) if t1_fares else 0
+            for field in breakdown_fields
+        }
+
         all_contribs = (
             session.query(RouteContribution)
             .filter(RouteContribution.run_id == latest.id)
@@ -183,6 +202,8 @@ def get_route_detail(route: str):
             "current_average_fare": fare_curve["T+1"],
             "fare_by_horizon": fare_curve,
             "lead_time_increase_pct": lead_time_increase_pct,
+            "elasticity_pct_per_day": elasticity_pct_per_day,
+            "fare_breakdown": fare_breakdown,
             "contribution_pp": this_contribution,
             "contribution_rank": rank,
             "total_routes": len(all_contribs),
@@ -238,6 +259,66 @@ def get_data_quality():
             "by_status": by_status,
             "by_reason": by_reason,
             "by_route": by_route,
+        }
+    finally:
+        session.close()
+
+
+@app.get("/api/backtest")
+def get_backtest():
+    try:
+        with open("backtest_summary.json") as f:
+            summary = json.load(f)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="No backtest results found. Run backtest_index.py first.")
+    series_df = pd.read_csv("backtest_series.csv")
+    return {
+        "summary": summary,
+        "series": series_df.to_dict(orient="records"),
+    }
+
+
+@app.get("/api/heatmap")
+def get_heatmap(freq: str = "weekly"):
+    if freq not in ("daily", "weekly", "monthly"):
+        raise HTTPException(status_code=400, detail="freq must be daily, weekly, or monthly")
+    session = SessionLocal()
+    try:
+        latest = get_latest_run(session)
+        snaps = (
+            session.query(RouteIndexSnapshot)
+            .filter(RouteIndexSnapshot.run_id == latest.id)
+            .all()
+        )
+        df = pd.DataFrame([
+            {"route": s.route, "date": s.collection_date, "index_value": s.index_value}
+            for s in snaps if s.collection_date
+        ])
+        if df.empty:
+            return {"routes": [], "periods": [], "matrix": []}
+        df["date"] = pd.to_datetime(df["date"])
+
+        route_series = {}
+        periods = set()
+        for route, group in df.groupby("route"):
+            series = group.set_index("date")["index_value"].sort_index()
+            aggregated = aggregate_series(series, freq)
+            route_series[route] = aggregated
+            periods.update(aggregated.index)
+
+        sorted_periods = sorted(periods)
+        routes = sorted(route_series.keys())
+        matrix = [
+            [
+                round(float(route_series[route][period]), 1) if period in route_series[route].index else None
+                for period in sorted_periods
+            ]
+            for route in routes
+        ]
+        return {
+            "routes": routes,
+            "periods": [p.strftime("%Y-%m-%d") for p in sorted_periods],
+            "matrix": matrix,
         }
     finally:
         session.close()

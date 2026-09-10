@@ -5,7 +5,7 @@ Run with: pytest
 """
 
 import pytest
-from index_math import price_relative, jevons_index, weighted_airix, route_contributions
+from index_math import price_relative, jevons_index, weighted_airix, route_contributions, chain_link_index, lead_time_elasticity
 
 
 # ---- price_relative ----
@@ -77,3 +77,35 @@ def test_route_contributions_sum_matches_total_change():
     assert contributions["B"] == pytest.approx(-2.8)
     # Contributions should sum to the weighted total change
     assert sum(contributions.values()) == pytest.approx(0.2)
+
+
+# ---- chain_link_index ----
+
+def test_chain_link_index_constant_series():
+    assert chain_link_index([100, 100, 100]) == pytest.approx(100.0)
+
+def test_chain_link_index_uses_geometric_mean():
+    # gmean([80, 125]) == 100 exactly; arithmetic mean would give 102.5 —
+    # proves this chains geometrically, consistent with Jevons.
+    assert chain_link_index([80, 125]) == pytest.approx(100.0)
+
+def test_chain_link_index_empty_raises():
+    with pytest.raises(ValueError):
+        chain_link_index([])
+
+
+# ---- lead_time_elasticity ----
+
+def test_lead_time_elasticity_rises_as_departure_approaches():
+    # Fare climbs steadily as horizon shrinks -> positive elasticity
+    fares = {"T+45": 900, "T+30": 950, "T+15": 1000, "T+7": 1030, "T+1": 1060}
+    result = lead_time_elasticity(fares)
+    assert result > 0
+
+def test_lead_time_elasticity_zero_for_flat_fares():
+    fares = {"T+45": 1000, "T+30": 1000, "T+15": 1000, "T+7": 1000, "T+1": 1000}
+    assert lead_time_elasticity(fares) == pytest.approx(0.0)
+
+def test_lead_time_elasticity_requires_two_horizons():
+    with pytest.raises(ValueError):
+        lead_time_elasticity({"T+1": 1000})

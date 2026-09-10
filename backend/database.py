@@ -5,11 +5,12 @@ Each pipeline run is stored as a dated snapshot, so history accumulates
 over time instead of being overwritten (unlike the raw CSV files).
 """
 
+import os
 from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime
 from sqlalchemy.orm import declarative_base, sessionmaker
 from datetime import datetime
 
-DATABASE_URL = "sqlite:///airix.db"
+DATABASE_URL = os.environ.get("AIRIX_DB_URL", "sqlite:///airix.db")
 engine = create_engine(DATABASE_URL, echo=False)
 Base = declarative_base()
 SessionLocal = sessionmaker(bind=engine)
@@ -35,6 +36,7 @@ class RouteIndexSnapshot(Base):
     run_id = Column(Integer)
     route = Column(String, index=True)
     collection_round = Column(Integer)
+    collection_date = Column(String)
     index_value = Column(Float)
 
 
@@ -61,7 +63,10 @@ class FareObservation(Base):
     collection_time = Column(String)
     booking_horizon = Column(String)
     base_fare = Column(Float)
-    taxes = Column(Float)
+    fuel_surcharge = Column(Float)
+    udf = Column(Float)
+    convenience_fee = Column(Float)
+    gst = Column(Float)
     total_fare = Column(Float)
     availability = Column(String)
     source = Column(String)

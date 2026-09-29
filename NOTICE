@@ -1,0 +1,42 @@
+AIRIX — Airfare Intelligence & Price Index Engine
+Copyright (c) 2026 Kabir Sinha and the AIRIX contributors
+
+The source code in this repository is licensed under the MIT License (see LICENSE).
+The MIT License does NOT apply to the third-party material listed below, which
+remains under its own terms.
+
+------------------------------------------------------------------------------
+1. Indian domestic air-traffic data (DGCA)
+------------------------------------------------------------------------------
+Files:   backend/dgca_data/city_traffic.csv
+         backend/route_weights.csv (derived from the file above by
+         backend/calculate_dgca_weights.py)
+Source:  india-aviation-traffic by Vonter — https://github.com/Vonter/india-aviation-traffic
+         Original data: Directorate General of Civil Aviation (DGCA),
+         https://www.dgca.gov.in/digigov-portal/ and Ministry of Civil Aviation,
+         https://www.civilaviation.gov.in/
+License: Open Database License (ODbL) v1.0 —
+         https://opendatacommons.org/licenses/odbl/1.0/
+
+Contains information from the india-aviation-traffic dataset, which is made
+available under the ODbL. The two files above (including the derived route
+weights) are shared under the same license, not under MIT.
+
+------------------------------------------------------------------------------
+2. Fonts
+------------------------------------------------------------------------------
+The dashboard loads Barlow, Barlow Condensed and IBM Plex Mono through
+next/font/google. The font files are not stored in this repository; they are
+downloaded at build time and are licensed under the SIL Open Font License 1.1.
+
+------------------------------------------------------------------------------
+3. Data and affiliation
+------------------------------------------------------------------------------
+Fare observations in this repository are synthetic, or were collected from the
+bundled mock booking site (scraper/mock_site/). No live airline or OTA pages
+were scraped. Airline and OTA names are trademarks of their owners and are used
+only to describe the problem.
+
+This project was built for Smart India Hackathon 2026 (SIH26056) and is not
+affiliated with or endorsed by MoSPI, DGCA, the Ministry of Civil Aviation or
+any airline.

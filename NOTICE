@@ -1,9 +1,8 @@
 AIRIX — Airfare Intelligence & Price Index Engine
 Copyright (c) 2026 Kabir Sinha and the AIRIX contributors
 
-The source code in this repository is licensed under the MIT License (see LICENSE).
-The MIT License does NOT apply to the third-party material listed below, which
-remains under its own terms.
+All rights reserved during SIH 2026 evaluation. The third-party material listed
+below remains under its own terms.
 
 ------------------------------------------------------------------------------
 1. Indian domestic air-traffic data (DGCA)
@@ -20,7 +19,7 @@ License: Open Database License (ODbL) v1.0 —
 
 Contains information from the india-aviation-traffic dataset, which is made
 available under the ODbL. The two files above (including the derived route
-weights) are shared under the same license, not under MIT.
+weights) are shared under the same license.
 
 ------------------------------------------------------------------------------
 2. Fonts

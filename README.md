@@ -1,7 +1,6 @@
 # AIRIX — Airfare Intelligence & Price Index Engine
 
 [![Tests](https://github.com/kabir-sinha/airix/actions/workflows/tests.yml/badge.svg)](https://github.com/kabir-sinha/airix/actions/workflows/tests.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 ![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)
 ![SIH 2026](https://img.shields.io/badge/SIH%202026-SIH26056-orange)
@@ -107,7 +106,7 @@ Please report vulnerabilities privately — see [SECURITY.md](SECURITY.md). Do n
 
 ## Licence and data
 
-Code is released under the [MIT License](LICENSE). Third-party material keeps its own terms — see [NOTICE](NOTICE):
+All rights reserved during SIH 2026 evaluation. Third-party material keeps its own terms — see [NOTICE](NOTICE):
 
 - Route weights use DGCA traffic data from [Vonter/india-aviation-traffic](https://github.com/Vonter/india-aviation-traffic), under the [Open Database License (ODbL) 1.0](https://opendatacommons.org/licenses/odbl/1.0/). `backend/dgca_data/city_traffic.csv` and the derived `backend/route_weights.csv` stay under ODbL. Data: DGCA and Ministry of Civil Aviation.
 - Fare data is synthetic or comes from the bundled mock booking site; no live airline or OTA pages were scraped.

@@ -1,5 +1,10 @@
 # AIRIX — Airfare Intelligence & Price Index Engine
-![Tests](https://github.com/kabir-sinha/airix/actions/workflows/tests.yml/badge.svg)
+
+[![Tests](https://github.com/kabir-sinha/airix/actions/workflows/tests.yml/badge.svg)](https://github.com/kabir-sinha/airix/actions/workflows/tests.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)
+![SIH 2026](https://img.shields.io/badge/SIH%202026-SIH26056-orange)
 
 **SIH26056 · Ministry of Statistics & Programme Implementation (MoSPI)**
 
@@ -22,7 +27,9 @@ A simple arithmetic average of price changes gives misleading results — it tre
 
 ## Architecture
 
+```
 Fare data → Cleaning & audit trail → Jevons Index calc → SQLite (historical snapshots) → FastAPI → Next.js dashboard
+```
 
 
 - **Backend**: Python, FastAPI, SQLAlchemy, SQLite
@@ -78,6 +85,31 @@ Runs the full pipeline once immediately, then daily at 02:00. See `docs/PS_MAPPI
 
 Visit `http://localhost:3000/validation` for the back-test results (currently a synthetic-proxy validation — see the disclaimer on that page and in `docs/PS_MAPPING.md`).
 
+## Repository map
+
+```
+backend/     pipeline scripts (generate → clean → weight → index → backtest → load), FastAPI app (main.py),
+             index maths (index_math.py), scheduler, 43 pytest tests (test_*.py), dgca_data/
+frontend/    Next.js dashboard: overview, routes, lead time, data quality, validation (see frontend/README.md)
+scraper/     Playwright scraper and the mock booking site it is validated against
+docs/        PS_MAPPING.md (problem statement → implementation), design notes
+```
+
 ## Team
 
-Built for Smart India Hackathon 2026.
+Built by **Team AIRIX**, Bennett University, for Smart India Hackathon 2026 (problem statement SIH26056, MoSPI). Team lead: [Kabir Sinha](https://github.com/kabir-sinha).
+
+Sister project: SOCRIX, SOC assurance analytics for NCIIPC (SIH26157).
+
+## Security
+
+Please report vulnerabilities privately — see [SECURITY.md](SECURITY.md). Do not open public issues for security problems.
+
+## Licence and data
+
+Code is released under the [MIT License](LICENSE). Third-party material keeps its own terms — see [NOTICE](NOTICE):
+
+- Route weights use DGCA traffic data from [Vonter/india-aviation-traffic](https://github.com/Vonter/india-aviation-traffic), under the [Open Database License (ODbL) 1.0](https://opendatacommons.org/licenses/odbl/1.0/). `backend/dgca_data/city_traffic.csv` and the derived `backend/route_weights.csv` stay under ODbL. Data: DGCA and Ministry of Civil Aviation.
+- Fare data is synthetic or comes from the bundled mock booking site; no live airline or OTA pages were scraped.
+
+Not affiliated with or endorsed by MoSPI, DGCA or any airline.
